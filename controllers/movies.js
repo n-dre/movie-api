@@ -1,24 +1,20 @@
-/* eslint-disable max-len */
 const movies = require('../movies')
 
 const getAllMovies = (request, response) => {
   return response.send(movies)
 }
 
-const getMovieByTitle = (request, response) => {
-  const { title } = request.params
+const searchMovieByTitleOrDirector = (request, response) => {
+  const { search } = request.params
 
-  const foundMovie = movies.filter((movie) => { movie.title === title })
+  const movie = movies.filter((movie) => {
+    return movie.title.toLowerCase().includes(search.toLowerCase()) ||
+      movie.directors.find((director) => director.toLowerCase().includes(search.toLowerCase()))
+  })
 
-  return response.send(foundMovie)
-}
+  if (!movie.length) return response.sendStatus(404)
 
-const getMovieByDirectors = (request, response) => {
-  const { directors } = request.params
-
-  const foundMovie = movies.filter((movie) => { movie.directors === directors })
-
-  return response.send(foundMovie)
+  return response.send(movie)
 }
 
 const createNewMovie = (request, response) => {
@@ -27,7 +23,9 @@ const createNewMovie = (request, response) => {
   } = request.body
 
   if (!title || !directors || !releaseDate || !rating || !runTime || !genres) {
-    return response.status(400).send('The following fields are required: title, directors, releaseDate, rating, runTimes, genres')
+    return response
+      .status(400)
+      .send('The following parameters are required: title, directors, releaseDate, rating, runTime, genres')
   }
 
   const newMovie = {
@@ -39,5 +37,4 @@ const createNewMovie = (request, response) => {
   return response.status(201).send(newMovie)
 }
 
-module.exports = { getAllMovies, getMovieByTitle, getMovieByDirectors, createNewMovie }
-
+module.exports = { getAllMovies, searchMovieByTitleOrDirector, createNewMovie }

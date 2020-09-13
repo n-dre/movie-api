@@ -18,7 +18,6 @@ module.exports = {
     'computed-property-spacing': ['error', 'never'],
     'dot-location': ['error', 'property'],
     'eol-last': ['error', 'always'],
-    'eqeqeq': ['error', 'always'],
     'func-call-spacing': ['error', 'never'],
     'function-paren-newline': ['error', 'never'],
     'implicit-arrow-linebreak': ['error', 'beside'],
